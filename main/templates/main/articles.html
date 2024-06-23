@@ -1,0 +1,42 @@
+{% extends "main/base.html" %}
+{% load i18n %}
+{% block 'title_head' %} Articles {% endblock %}
+
+{% block 'title'%}
+<h2 class="title">{% trans "Welcome to articles page" %}.</h1>
+<h2 class="subtitle">{% trans "Articles" %}.</h2>
+{% endblock %}
+
+{% block 'body' %}
+
+<section class="section">
+    
+    {% if articles %}
+    {% for article in articles %}
+    <article class="media">
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong class="">{{ article.title }}.</strong>
+              <br />
+              {{ article.content }}
+            </p>
+            <B>
+                <em>{% trans "Published on" %} {{ article.publication_date }}.</em>
+            </B>
+          </div>
+        </div>
+      </article>
+
+    {% endfor %}
+
+    {% else %}
+    <h1 class="title">{% trans "No articles are available."%}</h1>
+    {% endif%}
+
+
+   
+
+</section>
+
+{% endblock %}

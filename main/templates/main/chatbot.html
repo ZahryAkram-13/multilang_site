@@ -1,0 +1,41 @@
+{% extends "main/base.html" %}
+{% load i18n %}
+{% block 'title_head' %} Chatbot {% endblock %}
+
+{% block 'title'%}
+<h1 class="title">
+    <a href="https://chatterbot.readthedocs.io/en/stable/">Chatterbot</a>
+    {% trans "python library" %}.</h1>
+<h2 class="subtitle">{% trans "Chat with me" %}.</h2>
+{% endblock %}
+
+{% block 'body' %}
+<div id="chat-container">
+    <div id="chat-messages">
+        <article class="message">
+            <div class="message-header">
+                <p>Chatbot</p>
+            </div>
+            <div class="message-body">
+                Hello! How can I assist you today?
+            </div>
+        </article>
+    </div>
+    <br>
+    <div id="chat-input">
+
+        <form class="columns is-variable is-2" id="chat-form">
+            {% csrf_token %}
+
+            <div class="column is-four-fifths">
+                <input class="input is-warning" type="text" id="user-input" placeholder="Type your message here..."
+                    autocomplete="off">
+            </div>
+            <div class="column">
+                <button class="button" type="submit">Send</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

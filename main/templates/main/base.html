@@ -1,0 +1,136 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <title>{% block 'title_head' %} base {% endblock %} </title>
+</head>
+
+<body>
+    <div class="section fixed-grid has-4-cols">
+        <div class="grid">
+            <div class="cell">
+                <aside class="menu">
+                    <p class="menu-label">Menu</p>
+                    <ul class="menu-list">
+                        <li> <a href="{% url 'home' %}" class="button is-gray">Home</a>
+                        </li>
+                        <li> <a href="{% url 'articles' %}" class="button is-gray">Articles</a>
+                        </li>
+                        <li> <a href="{% url 'chatbot' %}" class="button is-gray">Chatbot</a>
+                        </li>
+                    </ul>
+                </aside>
+            </div>
+
+            <div class="cell is-col-span-2">
+
+                <section class="hero is-warning">
+                    <div class="hero-body">
+                        {% block 'title'%}
+                        <h1 class="title"> base </p>
+                            <h2 class="subtitle">base <3 </p>
+                                    {% endblock %}
+                    </div>
+                </section>
+                <br><br>
+                {% block 'body' %}
+                {% endblock %}
+
+            </div>
+            <div class="cell">
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <div class="select">
+                        <input name="next" type="hidden" value="{{ redirect_to }}">
+                        <select name="language">
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% get_available_languages as LANGUAGES %}
+                            {% for lang in LANGUAGES %}
+                            
+                            <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %} selected {% endif %}>
+                                {{ lang.1 }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <input class="button is-dark" type="submit" value="{% trans 'Change language' %}">
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <footer class="footer">
+        <div class="content has-text-centered ">
+            <p>
+                <strong>multiling_site</strong> by <a href="https://jgthms.com" class="is-warning">Zahry akram</a>.
+                The source code is licensed
+                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The
+                website is made by love, coffe and late night stand.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const YOU = "YOU"
+        const CHATBOT = "CHATBOT"
+        document.getElementById('chat-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const userInput = document.getElementById('user-input');
+            const question = userInput.value;
+            if (question.trim() !== "") {
+                addMessage(YOU, question);
+                userInput.value = "";
+                // Simulating a chatbot response after a delay
+                get_answer(question);
+            }
+        });
+
+        function addMessage(sender, message) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageElement = document.createElement('article');
+            messageElement.className = 'message';
+
+            const messageHeader = document.createElement('div');
+            messageHeader.className = 'message-header';
+            const senderElement = document.createElement('p');
+            senderElement.textContent = sender;
+            messageHeader.appendChild(senderElement);
+
+            const messageBody = document.createElement('div');
+            messageBody.className = 'message-body';
+            messageBody.textContent = message;
+
+            messageElement.appendChild(messageHeader);
+            messageElement.appendChild(messageBody);
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function get_answer(question) {
+            const csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
+            if (csrfTokenElement) {
+                const csrfToken = csrfTokenElement.value;
+                const response = await fetch('', {
+                    method: 'POST',
+                    headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        'csrfmiddlewaretoken': csrfToken,
+                        'question': question
+                    })
+                });
+                const data = await response.json()
+                console.log(data.response)
+                addMessage(CHATBOT, data.response);
+            } else {
+                console.error("CSRF token not found");
+            }
+        }
+    </script>
+
+</body>
+
+</html>

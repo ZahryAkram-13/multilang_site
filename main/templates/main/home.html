@@ -1,0 +1,21 @@
+{% extends "main/base.html" %}
+{% load i18n %}
+{% block 'title_head' %} Home {% endblock %}
+
+{% block 'title'%}
+<h1 class="title">{% trans "Welcome to Home page" %}.</h1>
+<h2 class="subtitle">{% trans "You can access to our Articles or Chatbot" %}.</h2>
+{% endblock %}
+
+{% block 'body' %}
+<div class="fixed-grid has-2-cols">
+    <div class="grid">
+        <a href="{% url 'articles' %}" class="cell button is-dark">Articles</a>
+        <a href="{% url 'chatbot' %}" class="cell button is-dark">Chatbot</a>
+
+
+    </div>
+</div>
+
+
+{% endblock %}
