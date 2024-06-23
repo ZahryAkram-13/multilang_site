@@ -1,0 +1,15 @@
+# Fichiers de base de données SQLite
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+
+# Fichiers de certificats
+cert.pem
+key.pem
+
+# Dossiers et fichiers compilés Python
+__pycache__/
+*.pyc
+
+# Dossiers statiques générés par Django
+static/admin/
