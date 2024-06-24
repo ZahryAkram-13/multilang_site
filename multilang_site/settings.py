@@ -94,7 +94,6 @@ DATABASES = {
 
 database_url = os.environ.get("DATABASE_URL")
 DATABASES["default"] = dj_database_url.parse(database_url)
-postgresql://multilang_site_user:C9f6gYiFEMIPHDqL0Kig610FqXTNNyTy@dpg-cpsni0aj1k6c738r71mg-a.oregon-postgres.render.com/multilang_site
 
 
 # Password validation
