@@ -25,13 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(BASE_DIR, '.secret_key.txt')) as f:
-    SECRET_KEY = f.read().strip()
 
+SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split("")
 
 
 # Application definition
@@ -93,6 +92,10 @@ DATABASES = {
     }
 }
 
+database_url = os.environ.get("DATABASE_URL")
+DATABASES["default"] = dj_database_url.parse(database_url)
+postgresql://multilang_site_user:C9f6gYiFEMIPHDqL0Kig610FqXTNNyTy@dpg-cpsni0aj1k6c738r71mg-a.oregon-postgres.render.com/multilang_site
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -143,7 +146,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
 
 
 # Default primary key field type
